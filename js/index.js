@@ -4,12 +4,38 @@
 //object aanmaken
 const artikel = {
     initFields() {
+        document.getElementById("form").addEventListener("submit", e => {
+            e.preventDefault();
+            let inputValue = document.getElementById("Searchfield").value;
+            // inputValue is de value van de invulveld", inputValue);
+            this.renderArtikelsVolgensKeyword(inputValue);
+        });
+        document.getElementById("likes").addEventListener("change", e => {
+            let inputValue = document.getElementById("Serachfield").value;
+            if (inputValue == "") {
+                this.renderdata();
+            } else if (inputValue != "") {
+                this.renderArtikelsVolgensSearchfield(inputValue);
+            }
+            console.log("checked");
+        });
+    },
+    dataArtikels() {
+        document.getElementById("content").innerHTML = "";
         fetch(`https://thecrew.cc/news/read.php`) //fetch variabelen
             .then(response => {
                 return response.json();
             })
             .then(data => {
                 console.log(data);
+                var checkLikes = document.getElementById("likes");
+                if (checkLikes.checked === true) {
+                    data.news.sort((a, b) => { //stap 5: de gebruiker kan de lijst van artikels op likes sorteren
+                        return parseFloat(b.likes) - parseFloat(a.likes); //sorteer functie om de likes te kunnen sorteren voor de gebruiker
+                    });
+                } else if (checkLikes.checked === false) {
+                    this.renderdata();
+                }
                 data = data.news;
                 let Artikels = [];
                 for (let i = 0; i < data.length; i++) {
@@ -18,36 +44,40 @@ const artikel = {
                 }
 
             });
-    },
 
-};
 
-//Alles in een klasse opslaan
-class Artikels {
-    constructor(IDartikel, title, content, datum, likes, imageURL) {
-        this._IDartikel = IDartikel;
-        this._title = title;
-        this._content = content;
-        this._datum = datum;
-        this._likes = likes;
-        this._imageURL = imageURL;
+    };
+
+    //Alles in een klasse opslaan
+    class Artikels {
+        constructor(IDartikel, title, content, datum, likes, imageURL) {
+            this._IDartikel = IDartikel;
+            this._title = title;
+            this._content = content;
+            this._datum = datum;
+            this._likes = likes;
+            this._imageURL = imageURL;
+        }
+
+        likes() {
+            fetch('https://thecrew.cc/news/create.php', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        UUID: element.UUID
+                    })
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => {
+                    this.handlerError(error);
+                    console.log('Error:', error);
+                });
+        }
     }
-    likes() {
-        fetch('https://thecrew.cc/news/create.php', {
-                method: 'POST',
-                body: "UUID"
-            })
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {});
-
-    }
-
 
 }
-
-
 
 artikel.initFields();
 
