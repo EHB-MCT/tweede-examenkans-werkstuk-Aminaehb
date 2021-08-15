@@ -2,25 +2,23 @@
 
 // stap 1: haal de artikels op van de endpoint
 //object aanmaken
-const artikel = {
-    initFields() {
-        document.getElementById("form").addEventListener("submit", e => {
-            e.preventDefault();
-            let inputValue = document.getElementById("Searchfield").value;
+const artikels = {
+    init() {
+        const search_button = document.getElementById("form");
+        search_button.addEventListener("submit", e => {
+            e.preventDefault(); //om in de search button iets op te zoeken
+            const inputValue = document.getElementById("SearchField").value;
             // inputValue is de value van de invulveld", inputValue);
-            this.renderArtikelsVolgensKeyword(inputValue);
+            this.renderArtikelsVolgensSearchfield(inputValue);
         });
         document.getElementById("likes").addEventListener("change", e => {
-            let inputValue = document.getElementById("Serachfield").value;
-            if (inputValue == "") {
-                this.renderdata();
-            } else if (inputValue != "") {
-                this.renderArtikelsVolgensSearchfield(inputValue);
-            }
-            console.log("checked");
+            e.preventDefault();
+            const inputValue = document.getElementById("checkbox").value;
+            console.log(inputValue);
+            this.renderartikels();
         });
     },
-    dataArtikels() {
+    renderartikels() {
         document.getElementById("content").innerHTML = "";
         fetch(`https://thecrew.cc/news/read.php`) //fetch variabelen
             .then(response => {
@@ -28,79 +26,92 @@ const artikel = {
             })
             .then(data => {
                 console.log(data);
-                var checkLikes = document.getElementById("likes");
-                if (checkLikes.checked === true) {
+                var checkLikes = document.getElementById("likes"); //returns een array aan nieuwsartikels met het aantal likes
+                if (checkLikes.checked == true) {
                     data.news.sort((a, b) => { //stap 5: de gebruiker kan de lijst van artikels op likes sorteren
-                        return parseFloat(b.likes) - parseFloat(a.likes); //sorteer functie om de likes te kunnen sorteren voor de gebruiker
+                        return b.likes - a.likes; //sorteer functie om de likes te kunnen sorteren voor de gebruiker
                     });
                 } else if (checkLikes.checked === false) {
-                    this.renderdata();
+                    this.renderartikels();
                 }
-                data = data.news;
-                let Artikels = [];
-                for (let i = 0; i < data.length; i++) {
-                    console.log(data[i]);
-                    let artikel = new Artikels(data[i].UUID, data[i].title, data[i].content, data[i].publicationDate, data[i].likes, data[i].imageURI);
-                }
+                data.news.forEach(element => {
+                    let html = `<article> 
+                                    <h1>${element.title}</h1>
+                                    <img src="${element.imageURI}">
+                                    <p>${element.content}</p>
+                                    </article>`;
+                    document.getElementById("content").insertAdjacentHTML("beforeend", html);
 
-            });
-
-
-    };
-
-    //Alles in een klasse opslaan
-    class Artikels {
-        constructor(IDartikel, title, content, datum, likes, imageURL) {
-            this._IDartikel = IDartikel;
-            this._title = title;
-            this._content = content;
-            this._datum = datum;
-            this._likes = likes;
-            this._imageURL = imageURL;
-        }
-
-        likes() {
-            fetch('https://thecrew.cc/news/create.php', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        UUID: element.UUID
-                    })
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data);
-                })
-                .catch((error) => {
-                    this.handlerError(error);
-                    console.log('Error:', error);
+                    // stap 2: De klasse "Artikels" heeft een "like" functie die als volgt werkt
+                    /* class artikels { //klasse artikels aanmaken en elke properties apart opslaan
+                         constructor(UUID, title, content, datum, likes, imageURL) {
+                             this._title = element.title;
+                             this._UUID = element.UUID;
+                             this._content = element.content;
+                             this._datum = element.datum;
+                             this._likes = element.likes;
+                             this._imageURI = element.imageURI;
+                         } */
                 });
-        }
+            });
+    },
+    postLikes() {
+        fetch('https://thecrew.cc/news/create.php', { //fetch de post request
+                method: 'POST',
+                body: JSON.stringify({
+                    //UUID: element.UUID
+                })
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+            })
+            .catch((error) => { // to catch any errors
+                this.handlerError(error);
+                console.log('Error:', error);
+            });
+    },
+    renderArtikelsVolgensSearchfield(auteur) {
+        fetch("https://thecrew.cc/news/read.php")
+            .then(response => {
+                console.log(response);
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                document.getElementById("content").innerHTML = "";
+
+                const checkLikes = document.getElementById("likes"); //stap 5: de gebruiker de lijst van artikels kan sorteren op likes
+                if (checkLikes.checked === true) {
+                    console.log("waar");
+                    data.news.sort((a, b) => {
+                        return a.likes - b.likes;
+                    });
+
+                } else if (checkLikes.checked === false) {
+                    console.log("vals");
+                    this.renderArtikelsVolgensSearchfield(auteur);
+                }
+                data.news.forEach(element => { // Stap 4: Search Field  voor user (filter op de titel en in de content)
+                    let titleString = element.title;
+                    let contentString = element.content;
+                    if (titleString.includes(auteur) || contentString.includes(auteur)) {
+                        console.log("ok");
+                        let html = `<article> 
+                            <h1>${element.title}</h1>
+                            <img src="${element.imageURI}">
+                            <p>${element.content}</p>
+                        </article>`;
+                        document.getElementById("content").insertAdjacentHTML("beforeend", html);
+                    }
+
+
+                });
+            });
     }
 
-}
 
-artikel.initFields();
+};
 
-// stap 2: De klasse "Artikels" heeft een "like" functie die als volgt werkt
-// POST request = https://thecrew.cc/news/create.php
-
-
-// stap 3: Geef de lijst van artikels overzichtelijk weer in de feed, met de titel, afbeelding en intro tekst. (HTML & CSS)
-// Stap 4: Search Field  voor user (filter op de titel en in de content)
-//stap 5: de gebruiker de lijst van artikels kan sorteren op likes
-//sortLikes(likes) {
-
-//});
-//this.aantalLikes(sortedlikes);
-//},
-
-
-
-
-
-// fetch('https://thecrew.cc/news/create.php', {
-//    method: 'POST',
-//     body: "UUID"
-// })
-// .then(results => results.json())
-// .then(console.log);
+artikels.init();
+artikels.renderartikels();

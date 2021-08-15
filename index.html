@@ -9,34 +9,25 @@
 
 <body>
   <main>
-    <h1>Vers van de Pers</h1>
+    <div id="title">
+      <h1>Vers van de Pers</h1>
+    </div>
     <form id="form">
-
       <label>
         Search here by keyword
         <input id="SearchField" type="text">
+        <button type="submit" id="search">Search</button>
       </label>
-
-      <label for="likes">Filter likes
-        <input type="checkbox" value="filter volgens likes" id="likes" name="likes">
+      <label id="likes" for="likes">Filter likes
+        <input id="checkbox" type="checkbox" value="true" id="likes" name="likes">
       </label>
-
-      <button type="submit" id="search">Search</button>
     </form>
     <section id="content">
-      <!-- <article>
-          <div class="image_wrapper">
-            <img src="" alt="EHB artikel">
-          </div>
-          <div class="article_content_wrapper">
-            <div>
-              <h3>Title</h3>
-              <p>Content</p>
-            </div>
-            <div class="datum">Datum</div>
-            <div class="likes">Likes</div>
-          </div>
-        </article> -->
+      <article>
+        <h1>${element.title}</h1>
+        <img src="${element.imageURI}">
+        <p>${element.content}</p>
+      </article>
     </section>
   </main>
   <script type="module" src="./js/index.js"></script>

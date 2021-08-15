@@ -1,0 +1,6 @@
+Stap 1: haal de artikels op van de endpoint
+Stap 2: De klasse "Artikels" heeft een "like" functie die als volgt werkt
+POST request = https://thecrew.cc/news/create.php
+Stap 3: Geef de lijst van artikels overzichtelijk weer in de feed, met de titel, afbeelding en intro tekst. (HTML & CSS)
+Stap 4: Search Field  voor user (filter op de titel en in de content)
+Stap 5: De gebruiker de lijst van artikels kan sorteren op likes
