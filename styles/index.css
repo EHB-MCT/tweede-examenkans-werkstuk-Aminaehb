@@ -2,6 +2,8 @@ body {
   font-family: sans-serif;
   padding: 20px;
   background-image: url(/background\ school.png);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 * {
@@ -12,38 +14,17 @@ body {
 
 main {
   margin: auto;
-  display: flex;
+  width: 50%;
 }
 
-#container {
-  width: 100vw;
-  height: 100vh;
+
+#Searchfield {
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 20px;
+  margin: 2px;
 }
 
-select,
-input {
-  appearance: none;
-  -webkit-appearance: none;
-  font-size: 16px;
-  font-family: sans-serif;
-  border: 2px solid white;
-  border-radius: 0;
-  margin-top: 3px;
-  background-color: rgba(255, 255, 255, 0.534);
-  padding: 0px 5px;
-  height: 30px;
-  display: block;
-}
-
-button {
-  font-size: 16px;
-  background-color: #2275D3;
-  border: none;
-  color: white;
-  height: 30px;
-  padding: 0px 6px;
-  margin-left: 20px;
-}
 
 form {
   width: 100%;
@@ -51,22 +32,47 @@ form {
   align-items: flex-end;
 }
 
-#results {
-  width: calc(100% - 300px);
+
+#container {
+  width: 100w;
+  height: 100vh;
 }
 
 h1 {
   margin-top: 20px;
   margin-bottom: 20px;
+  margin-left: 70px;
   color: white;
-  font-size: 50px;
+  font-size: 60px;
 }
 
 #content {
-  margin-top: 40px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+#content article {
+  width: 350px;
+  padding: 20px 20px;
+
+}
+
+#content img {
   width: 100%;
-  grid-template-columns: repeat(auto-fill, minmax(250px, auto));
-  display: grid;
-  row-gap: 60px;
-  column-gap: 40px;
+}
+
+button {
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #2275D3;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  height: 30px;
+  text-align: center;
+  padding: 6px 12px;
+  margin-left: 20px;
+  text-decoration: none;
+  display: inline-block;
 }
