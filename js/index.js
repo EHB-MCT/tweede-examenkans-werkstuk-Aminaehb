@@ -33,7 +33,7 @@ const artikels = {
                 var checkLikes = document.getElementById("likes"); //returns een array aan nieuwsartikels met het aantal likes
                 if (checkLikes.checked === true) {
                     data.news.sort((a, b) => { //stap 5: de gebruiker kan de lijst van artikels op likes sorteren
-                        return parseFloat(b.likes) - parseFloat(a.likes); //om van een string naar een nummer te gaan gebruiken we een parsefloat
+                        return parseFloat(b.likes) - parseFloat(a.likes); //om van een string naar een nummer te kunnen gaan gebruiken we een parsefloat
                     });
                 } else if (checkLikes.checked === false);
                 console.log(data);
@@ -44,7 +44,7 @@ const artikels = {
                                     <p>${element.content}</p>
                                     </article>`;
                     document.getElementById("content").insertAdjacentHTML("beforeend", html);
-
+                    this.postLikes(element.UUID); //functie op lijn 61 oproepen + ID meegeven
                     // stap 2: De klasse "Artikels" heeft een "like" functie die als volgt werkt
                     /* class artikels { //klasse artikels aanmaken en elke properties apart opslaan
                          constructor(UUID, title, content, datum, likes, imageURL) {
@@ -58,11 +58,11 @@ const artikels = {
                 });
             });
     },
-    postLikes() {
+    postLikes(ID) {
         fetch('https://thecrew.cc/news/create.php', { //fetch de post request
                 method: 'POST',
                 body: JSON.stringify({
-                    //UUID: element.UUID
+                    UUID: ID // returns: "created" (status 200) wanneer het invoegen gelukt is.
                 })
             })
             .then((response) => response.json())
