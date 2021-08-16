@@ -35,12 +35,11 @@ const artikels = {
                     data.news.sort((a, b) => { //stap 5: de gebruiker kan de lijst van artikels op likes sorteren
                         return parseFloat(b.likes) - parseFloat(a.likes); //om van een string naar een nummer te gaan gebruiken we een parsefloat
                     });
-                } else if (checkLikes.checked === false) {
-                    this.renderartikels();
-                }
+                } else if (checkLikes.checked === false);
+                console.log(data);
                 data.news.forEach(element => {
                     let html = `<article> 
-                                    <h1>${element.title}</h1>
+                                    <h1>${element.title} Likes: ${element.likes}</h1>
                                     <img src="${element.imageURI}">
                                     <p>${element.content}</p>
                                     </article>`;
@@ -82,27 +81,26 @@ const artikels = {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
                 document.getElementById("content").innerHTML = "";
 
                 var checkLikes = document.getElementById("likes"); //stap 5: de gebruiker de lijst van artikels kan sorteren op likes
                 if (checkLikes.checked === true) {
                     console.log("waar");
                     data.news.sort((a, b) => {
-                        return parseFloat(a.likes) - parseFloat(b.likes);
+                        return parseFloat(b.likes) - parseFloat(a.likes);
                     });
 
                 } else if (checkLikes.checked === false) {
                     console.log("vals");
-                    this.renderArtikelsVolgensSearchfield(auteur);
                 }
+                console.log(data);
                 data.news.forEach(element => { // Stap 4: Search Field  voor user (filter op de titel en in de content)
                     let titleString = element.title;
                     let contentString = element.content;
                     if (titleString.includes(auteur) || contentString.includes(auteur)) {
                         console.log("ok");
                         let html = `<article> 
-                            <h1>${element.title}</h1>
+                            <h1>${element.title} Likes: ${element.likes}</h1>
                             <img src="${element.imageURI}">
                             <p>${element.content}</p>
                         </article>`;

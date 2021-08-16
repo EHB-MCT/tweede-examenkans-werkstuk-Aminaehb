@@ -35,14 +35,15 @@ main {
   align-items: center;
 }
 
-#likes {
-  margin-left: 2em;
-  margin-right: 0em;
-}
-
 #title h1 {
   color: black;
   font-size: 60px;
+}
+
+#title p {
+  color: black;
+  float: right;
+  font-size: smaller;
 }
 
 #content {
@@ -73,4 +74,3 @@ main {
   text-decoration: none;
   display: inline-block;
 }
-
