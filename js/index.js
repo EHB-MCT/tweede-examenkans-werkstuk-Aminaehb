@@ -1,21 +1,24 @@
 "use strict";
 
-// stap 1: haal de artikels op van de endpoint
+//Stap 1: haal de artikels op van de endpoint
 //object aanmaken
 const artikels = {
     init() {
-        const search_button = document.getElementById("form");
+        const search_button = document.getElementById("form"); // het lokaliseren van de item "form"
         search_button.addEventListener("submit", e => {
             e.preventDefault(); //om in de search button iets op te zoeken
-            const inputValue = document.getElementById("SearchField").value;
-            // inputValue is de value van de invulveld", inputValue);
-            this.renderArtikelsVolgensSearchfield(inputValue);
+            let inputValue = document.getElementById("SearchField").value;
+            // inputValue is de value van de invulveld
+            this.renderArtikelsVolgensSearchField(inputValue);
         });
         document.getElementById("likes").addEventListener("change", e => {
-            e.preventDefault();
-            const inputValue = document.getElementById("checkbox").value;
-            console.log(inputValue);
-            this.renderartikels();
+            let inputValue = document.getElementById("SearchField").value;
+            if (inputValue == "") {
+                this.renderartikels();
+            } else if (inputValue != "") {
+                this.renderArtikelsVolgensSearchField(inputValue);
+            }
+            console.log("checked");
         });
     },
     renderartikels() {
@@ -26,10 +29,11 @@ const artikels = {
             })
             .then(data => {
                 console.log(data);
+
                 var checkLikes = document.getElementById("likes"); //returns een array aan nieuwsartikels met het aantal likes
-                if (checkLikes.checked == true) {
+                if (checkLikes.checked === true) {
                     data.news.sort((a, b) => { //stap 5: de gebruiker kan de lijst van artikels op likes sorteren
-                        return b.likes - a.likes; //sorteer functie om de likes te kunnen sorteren voor de gebruiker
+                        return parseFloat(b.likes) - parseFloat(a.likes); //om van een string naar een nummer te gaan gebruiken we een parsefloat
                     });
                 } else if (checkLikes.checked === false) {
                     this.renderartikels();
@@ -71,7 +75,7 @@ const artikels = {
                 console.log('Error:', error);
             });
     },
-    renderArtikelsVolgensSearchfield(auteur) {
+    renderArtikelsVolgensSearchField(auteur) {
         fetch("https://thecrew.cc/news/read.php")
             .then(response => {
                 console.log(response);
@@ -81,11 +85,11 @@ const artikels = {
                 console.log(data);
                 document.getElementById("content").innerHTML = "";
 
-                const checkLikes = document.getElementById("likes"); //stap 5: de gebruiker de lijst van artikels kan sorteren op likes
+                var checkLikes = document.getElementById("likes"); //stap 5: de gebruiker de lijst van artikels kan sorteren op likes
                 if (checkLikes.checked === true) {
                     console.log("waar");
                     data.news.sort((a, b) => {
-                        return a.likes - b.likes;
+                        return parseFloat(a.likes) - parseFloat(b.likes);
                     });
 
                 } else if (checkLikes.checked === false) {
@@ -113,5 +117,5 @@ const artikels = {
 
 };
 
-artikels.init();
+artikels.init(); //functie oproepen
 artikels.renderartikels();
