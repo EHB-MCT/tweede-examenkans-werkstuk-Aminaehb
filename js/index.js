@@ -33,7 +33,7 @@ const artikels = {
                 var checkLikes = document.getElementById("likes"); //returns een array aan nieuwsartikels met het aantal likes
                 if (checkLikes.checked === true) {
                     data.news.sort((a, b) => { //stap 5: de gebruiker kan de lijst van artikels op likes sorteren
-                        return parseFloat(b.likes) - parseFloat(a.likes); //om van een string naar een nummer te kunnen gaan gebruiken we een parsefloat
+                        return b.likes - a.likes;
                     });
                 } else if (checkLikes.checked === false);
                 console.log(data);
@@ -87,7 +87,7 @@ const artikels = {
                 if (checkLikes.checked === true) {
                     console.log("waar");
                     data.news.sort((a, b) => {
-                        return parseFloat(b.likes) - parseFloat(a.likes);
+                        return b.likes - a.likes;
                     });
 
                 } else if (checkLikes.checked === false) {
